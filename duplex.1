@@ -1,0 +1,82 @@
+.TH DUPLEX 1 "March 2026" "duplex 0.1.0" "User Commands"
+.SH NAME
+duplex \- manual duplex printing for non-duplex printers
+.SH SYNOPSIS
+.B duplex
+.RI [ input.pdf ]
+.RI [ "lpr options" ]...
+.SH DESCRIPTION
+.B duplex
+is a shell script that enables manual duplex (two-sided) printing on printers
+that do not support automatic duplex. It splits a PDF into even and odd pages,
+prints the even pages first, then prompts the user to flip and reload the paper
+before printing the odd pages on the reverse side.
+.SH OPTIONS
+.TP
+.I input.pdf
+The PDF file to print. If omitted or set to "\-", reads from standard input.
+.TP
+.I "lpr options"
+Any additional options are passed directly to
+.BR lpr (1).
+.SH USAGE
+.IP 1. 4
+Run \fBduplex\fR with your PDF file.
+.IP 2. 4
+The script prints even-numbered pages first.
+.IP 3. 4
+When prompted, remove the printed pages from the output tray.
+.IP 4. 4
+Flip the stack and place it in Tray 1 with the printed side facing up.
+.IP 5. 4
+Press Enter to print the odd-numbered pages on the reverse side.
+.SH CONFIGURATION
+The printer name is hardcoded in the script as
+.BR Hewlett-Packard_HP_Color_LaserJet_M553 .
+Edit the script to change the \fBP\fR variable for your printer.
+.SH DEPENDENCIES
+.TP
+.BR pdftk (1)
+Used to split the PDF into even and odd pages.
+.TP
+.BR lpr (1)
+Used to send print jobs to the printer (provided by CUPS).
+.SH FILES
+The script creates temporary PDF files in \fB/tmp\fR which are automatically
+cleaned up on exit or when interrupted.
+.SH EXIT STATUS
+.TP
+.B 0
+Successful completion.
+.TP
+.B >0
+An error occurred.
+.SH EXAMPLES
+Print a PDF file:
+.RS
+.nf
+duplex document.pdf
+.fi
+.RE
+.PP
+Print from a pipeline:
+.RS
+.nf
+cat document.pdf | duplex
+.fi
+.RE
+.PP
+Print with additional lpr options:
+.RS
+.nf
+duplex document.pdf -o media=letter
+.fi
+.RE
+.SH SEE ALSO
+.BR lpr (1),
+.BR pdftk (1),
+.BR cups (1)
+.SH LICENSE
+CC0 1.0 Universal \- Public Domain Dedication
+.SH AUTHORS
+This man page was written with assistance from Claude (claude-opus-4-5-20251101).
